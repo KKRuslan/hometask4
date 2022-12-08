@@ -13,15 +13,13 @@ Vagrant.configure("2") do |config|
     end
 
     adminruslan.vm.provision "shell", run: "always",  inline: <<-SHELL
-        echo "Hello from the Ubuntu VM"
-        sudo useradd -m -p '$6$ruslan$SkpBJ//kWp1XN2Jh7yyknHxHdkk.RijEWUtdmerSv4tWwTZmDITK7ES16qovy3.hPEdbBSvDWedOWvMcsCI5U/' adminuser
-        sudo usermod -a -G admin adminuser
+        sudo useradd -m  -p '$6$ruslan$SkpBJ//kWp1XN2Jh7yyknHxHdkk.RijEWUtdmerSv4tWwTZmDITK7ES16qovy3.hPEdbBSvDWedOWvMcsCI5U/.' adminuser
+        sudo usermod -a -G sudo adminuser
         sudo useradd -m poweruser
         sudo passwd -d poweruser
-        echo 'poweruser ALL=(ALL) NOPASSWD: /usr/sbin/iptables' | sudo EDITOR='tee -a' visudo
-        sudo usermod -a -G adminuser poweruser
-        sudo ln -s /etc/mtab /home/poweruser/mylink
+        echo 'poweruser ALL=(ALL:ALL) /usr/sbin/iptables' >> /etc/sudoers
+        sudo usermod -a -G root poweruser
+        ln -s /home/poweruser/etc/mtab mylink
     SHELL
   end
-  
 end
